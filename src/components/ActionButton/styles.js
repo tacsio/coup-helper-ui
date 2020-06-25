@@ -27,8 +27,8 @@ export default StyleSheet.create({
     width: 120,
     color: "#FFF",
     fontWeight: "bold",
-    fontSize: 16,
-    paddingVertical: 5,
+    fontSize: 18,
+    paddingVertical: 6,
     lineHeight: 21,
   },
 });

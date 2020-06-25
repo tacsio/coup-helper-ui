@@ -3,6 +3,7 @@ import { View, Text, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import styles from "./styles";
+import defaultStyles from '../defaultStyles';
 
 import SetupHeader from "../../components/SetupHeader";
 import ActionButton from "../../components/ActionButton";
@@ -21,20 +22,20 @@ export default function Home() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={defaultStyles.container}>
       <SetupHeader />
 
-      <View style={styles.main}>
-        <Text style={styles.formLabel}>Nome</Text>
+      <View style={defaultStyles.main}>
+        <Text style={defaultStyles.formLabel}>Nome</Text>
         <TextInput
-          style={styles.formInput}
+          style={defaultStyles.formInput}
           value={nomeJogador}
           placeholder="Digite o seu nome"
           onChangeText={setNomeJogador}
         />
       </View>
 
-      <View style={styles.actions}>
+      <View style={defaultStyles.actions}>
         <ActionButton
           disabled={nomeJogador.trim() === ""}
           onPress={() => handleCreate()}

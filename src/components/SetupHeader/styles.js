@@ -7,7 +7,7 @@ export default StyleSheet.create({
 
   title: {
     color: "#FFF",
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     textShadowColor: "#000",
     textShadowOffset: {

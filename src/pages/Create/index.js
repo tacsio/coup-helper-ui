@@ -3,6 +3,7 @@ import { View, Text, TextInput } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import styles from "./styles";
+import defaultStyles from "../defaultStyles";
 
 import SetupHeader from "../../components/SetupHeader";
 import RulexBox from "../../components/RulesBox";
@@ -32,13 +33,13 @@ export default function Create() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={defaultStyles.container}>
       <SetupHeader />
 
-      <View style={styles.main}>
-        <Text style={styles.formLabel}>Número de Jogadores</Text>
+      <View style={defaultStyles.main}>
+        <Text style={defaultStyles.formLabel}>Número de Jogadores</Text>
         <TextInput
-          style={styles.formInput}
+          style={[defaultStyles.formInput, styles.formInput]}
           keyboardType="numeric"
           value={numeroJogadores}
           onChangeText={setNumeroJogadores}
@@ -49,7 +50,7 @@ export default function Create() {
         <RulexBox rules={regras} />
       </View>
 
-      <View style={styles.actions}>
+      <View style={defaultStyles.actions}>
         <ActionButton text="Criar" onPress={() => handleCreate()} />
       </View>
     </View>

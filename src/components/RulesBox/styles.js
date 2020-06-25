@@ -7,7 +7,7 @@ export default StyleSheet.create({
 
   ruleText: {
     color: "#FFF",
-    fontSize: 14,
-    lineHeight: 16,
+    fontSize: 18,
+    lineHeight: 21,
   },
 });
