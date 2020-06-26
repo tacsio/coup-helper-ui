@@ -2,19 +2,18 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   card: {
-    backgroundColor: "#36C2AA",
-    marginBottom: 10, //! TODO apagar
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 10,
+    marginBottom: 10,
+  },
+
+  normal: {
+    backgroundColor: "#36C2AA",
   },
 
   selected: {
     backgroundColor: "#402160",
-    marginBottom: 10, //! TODO apagar
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
   },
 
   name: {

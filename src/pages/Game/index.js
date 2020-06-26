@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { Feather } from "@expo/vector-icons";
-
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { View, Text, FlatList } from "react-native";
 
 import styles from "./styles";
 
+import HeaderNavigation from "../../components/HeaderNavigation";
 import OpponentCard from "../../components/OpponentCard";
 
 export default function Game() {
-  const navitagion = useNavigation();
-  const route = useRoute();
-
   const [codigoPartida, setCodigoPartida] = useState();
+  const [opponents, setOpponents] = useState([]);
 
   //carrega id partida da rota
   useEffect(() => {
@@ -20,28 +16,33 @@ export default function Game() {
     // const codigo = route.params.codigoPartida;
     // setCodigoPartida(codigo);
     //! TODO: remover
+    const op = [
+      {
+        id: 1,
+        nome: "Kamijo Touma",
+        moedas: 2,
+        cartas: ["Embaixador", "???"],
+      },
+      {
+        id: 2,
+        nome: "Kuroko Shirai",
+        moedas: 10,
+        cartas: ["???", "Duque"],
+      },
+      {
+        id: 4,
+        nome: "Shiage ",
+        moedas: 5,
+        cartas: ["???", "???"],
+      },
+    ];
     setCodigoPartida("3D41j");
+    setOpponents(op);
   }, []);
-
-  function handleSair() {
-    console.log("sair partida");
-  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.navigation}>
-        <TouchableOpacity onPress={() => navitagion.goBack()}>
-          <Feather name="chevron-left" color="#402160" size={32} />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.clipboard}>
-          <Text style={styles.clipboardText}>{`ID: ${codigoPartida}`}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => handleSair()}>
-          <Feather name="log-out" color="#402160" size={32} />
-        </TouchableOpacity>
-      </View>
+      <HeaderNavigation codigoPartida={codigoPartida} />
 
       <View style={styles.header}>
         <Text style={styles.title}>Social Isolation COUP</Text>
@@ -52,14 +53,13 @@ export default function Game() {
           <Text style={styles.labelRound}>Rodada de </Text>
           <Text style={styles.playerRound}>Misaka Mikoto </Text>
         </View>
-        <ScrollView style={styles.opponets}>
-          <OpponentCard />
-          <OpponentCard selected />
-          <OpponentCard />
-          <OpponentCard />
-          <OpponentCard />
-          <OpponentCard />
-        </ScrollView>
+
+        <FlatList
+          style={styles.opponets}
+          data={opponents}
+          keyExtractor={(opponent) => opponent.id.toString()}
+          renderItem={(opponent) => <OpponentCard opponent={opponent} />}
+        />
         <View style={styles.playerAction}></View>
       </View>
 

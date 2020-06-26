@@ -3,15 +3,19 @@ import { View, Text } from "react-native";
 
 import styles from "./styles";
 
-export default function OpponentCard({ selected }) {
+export default function OpponentCard({ selected, opponent }) {
   return (
-    <View style={selected ? styles.selected : styles.card}>
-      <Text style={styles.name}>Kamijo Touma</Text>
+    <View
+      style={
+        selected ? [styles.card, styles.selected] : [styles.card, styles.normal]
+      }
+    >
+      <Text style={styles.name}>{opponent.item.nome}</Text>
 
       <View style={styles.info}>
         <View style={styles.cards}>
-          <Text style={styles.cardName}>Embaixador</Text>
-          <Text style={styles.cardName}>???</Text>
+          <Text style={styles.cardName}>{opponent.item.cartas[0]}</Text>
+          <Text style={styles.cardName}>{opponent.item.cartas[1]}</Text>
         </View>
 
         <Text style={styles.coins}>(2 G)</Text>

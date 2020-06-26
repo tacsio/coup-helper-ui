@@ -13,10 +13,10 @@ export default function Routes() {
   return (
     <NavigationContainer>
       <AppStack.Navigator screenOptions={{ headerShown: false }}>
+      <AppStack.Screen name="Game" component={Game} />
       <AppStack.Screen name="Home" component={Home} />
       <AppStack.Screen name="Create" component={Create} />
       <AppStack.Screen name="Join" component={Join} />
-      <AppStack.Screen name="Game" component={Game} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
