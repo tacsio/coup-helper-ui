@@ -24,11 +24,12 @@ export default StyleSheet.create({
 
   buttonText: {
     textAlign: "center",
-    width: 120,
+    minWidth: 120,
     color: "#FFF",
     fontWeight: "bold",
     fontSize: 18,
     paddingVertical: 6,
+    paddingHorizontal: 10,
     lineHeight: 21,
   },
 });

@@ -10,12 +10,12 @@ export default function OpponentCard({ selected, opponent }) {
         selected ? [styles.card, styles.selected] : [styles.card, styles.normal]
       }
     >
-      <Text style={styles.name}>{opponent.item.nome}</Text>
+      <Text style={styles.name}>{opponent.nome}</Text>
 
       <View style={styles.info}>
         <View style={styles.cards}>
-          <Text style={styles.cardName}>{opponent.item.cartas[0]}</Text>
-          <Text style={styles.cardName}>{opponent.item.cartas[1]}</Text>
+          <Text style={styles.cardName}>{opponent.cartas[0]}</Text>
+          <Text style={styles.cardName}>{opponent.cartas[1]}</Text>
         </View>
 
         <Text style={styles.coins}>(2 G)</Text>

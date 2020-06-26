@@ -10,7 +10,7 @@ import RulexBox from "../../components/RulesBox";
 import ActionButton from "../../components/ActionButton";
 
 export default function Create() {
-  const navigaton = useNavigation();
+  const navigation = useNavigation();
   const route = useRoute();
 
   const [numeroJogadores, setNumeroJogadores] = useState("3");
@@ -30,6 +30,7 @@ export default function Create() {
   function handleCreate() {
     //TODO: navegar para partida
     console.log("create");
+    navigation.navigate("Game");
   }
 
   return (

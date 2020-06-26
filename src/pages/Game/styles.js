@@ -36,16 +36,64 @@ export default StyleSheet.create({
     color: "#402160",
   },
 
-  playerRound: {
+  playerName: {
     fontSize: 17,
     lineHeight: 21,
     fontWeight: "bold",
+    color: "#402160",
   },
 
   opponets: {
     paddingTop: 20,
   },
 
-  playerAction: {},
-  action: {},
+  playerAction: {
+    padding: 5,
+    marginBottom: 20,
+  },
+
+  playerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  ambassadorAction: {
+    backgroundColor: "#36C2AA",
+    padding: 3,
+    borderRadius: 5,
+  },
+
+  playerCoin: {
+    fontWeight: "bold",
+    fontSize: 18,
+    lineHeight: 21,
+  },
+
+  coinAction: {
+    paddingVertical: 5,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+  },
+
+  plusAction: {
+    backgroundColor: "#36C2AA",
+  },
+
+  minusAction: {
+    backgroundColor: "#C24044",
+  },
+
+  playerCards: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 15,
+  },
+
+  action: {
+    marginTop: 10,
+    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

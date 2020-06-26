@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 import styles from "./styles";
 
 import HeaderNavigation from "../../components/HeaderNavigation";
 import OpponentCard from "../../components/OpponentCard";
+import PlayerCard from "../../components/PlayerCard";
+import ActionButton from "../../components/ActionButton";
 
 export default function Game() {
   const [codigoPartida, setCodigoPartida] = useState();
@@ -35,6 +38,24 @@ export default function Game() {
         moedas: 5,
         cartas: ["???", "???"],
       },
+      {
+        id: 5,
+        nome: "Sasaki Kojiro ",
+        moedas: 5,
+        cartas: ["???", "???"],
+      },
+      {
+        id: 6,
+        nome: "Myamoto Musashi ",
+        moedas: 5,
+        cartas: ["???", "???"],
+      },
+      {
+        id: 7,
+        nome: "Shuho Takuan ",
+        moedas: 5,
+        cartas: ["???", "???"],
+      },
     ];
     setCodigoPartida("3D41j");
     setOpponents(op);
@@ -51,19 +72,47 @@ export default function Game() {
       <View style={styles.main}>
         <View style={styles.roundInfo}>
           <Text style={styles.labelRound}>Rodada de </Text>
-          <Text style={styles.playerRound}>Misaka Mikoto </Text>
+          <Text style={styles.playerName}>Misaka Mikoto </Text>
         </View>
 
-        <FlatList
-          style={styles.opponets}
-          data={opponents}
-          keyExtractor={(opponent) => opponent.id.toString()}
-          renderItem={(opponent) => <OpponentCard opponent={opponent} />}
-        />
-        <View style={styles.playerAction}></View>
+        <ScrollView>
+          <View style={styles.opponents}>
+            {opponents.map((opponent) => (
+              <OpponentCard key={opponent.id} opponent={opponent} />
+            ))}
+          </View>
+
+          <View style={styles.playerAction}>
+            <View style={styles.playerInfo}>
+              <Text style={styles.playerCoin}>
+                5
+                <Feather size={10} name="dollar-sign" />
+              </Text>
+
+              <TouchableOpacity style={[styles.coinAction, styles.plusAction]}>
+                <Feather name="plus" size={15} color="#FFF" />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.coinAction, styles.minusAction]}>
+                <Feather name="minus" size={15} color="#FFF" />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.ambassadorAction}>
+                <Feather name="inbox" size={32} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.playerCards}>
+              <PlayerCard />
+              <PlayerCard />
+            </View>
+          </View>
+        </ScrollView>
       </View>
 
-      <View style={styles.action}></View>
+      <View style={styles.action}>
+        <ActionButton text="Finalizar Turno" />
+      </View>
     </View>
   );
 }

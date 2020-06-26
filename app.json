@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "web-coup-helper",
-    "slug": "web-coup-helper",
+    "name": "Coup Helper",
+    "slug": "Coup Helper",
     "platforms": [
       "ios",
       "android",
@@ -13,7 +13,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#402160"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

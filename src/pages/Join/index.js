@@ -10,6 +10,8 @@ import ActionButton from "../../components/ActionButton";
 import RulesBox from "../../components/RulesBox";
 
 export default function Join() {
+  const navigation = useNavigation();
+  
   const [idParitda, setIdPartida] = useState("");
   const [codigoValido, setCodigoValido] = useState(false);
   const [regras, setRegras] = useState();
@@ -27,8 +29,9 @@ export default function Join() {
   }, [idParitda]); //TODO add debounce
 
   function handleJoin() {
-    console.log("join");
     //TODO: navegar para partida
+    console.log("join");
+    navigation.navigate("Game");
   }
   return (
     <View style={defaultStyles.container}>

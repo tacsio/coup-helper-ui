@@ -33,7 +33,7 @@ export default StyleSheet.create({
 
   actions: {
     flexDirection: "row",
-    marginBottom: 60,
+    marginBottom: 40,
     alignItems: "center",
     justifyContent: "space-evenly",
   },
