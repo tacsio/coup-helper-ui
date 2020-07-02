@@ -9,6 +9,8 @@ import SetupHeader from "../../components/SetupHeader";
 import RulexBox from "../../components/RulesBox";
 import ActionButton from "../../components/ActionButton";
 
+import { getRules } from "../../services/rulesService";
+
 export default function Create() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -17,14 +19,11 @@ export default function Create() {
   const [regras, setRegras] = useState({});
 
   useEffect(() => {
-    //TODO: consumir da API
-    const rules = {
-      qtdCartasBaralho: 20,
-      qtdCartasJogador: 8,
-      qtdMoedasJogador: 2,
-    };
-
-    setRegras(rules);
+    getRules(numeroJogadores)
+      .then((response) => setRegras(response.data))
+      .catch((error) => {
+        console.log(error);
+      });
   }, [numeroJogadores]);
 
   function handleCreate() {

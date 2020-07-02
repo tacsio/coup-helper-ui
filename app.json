@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Coup Helper",
-    "slug": "Coup Helper",
+    "slug": "coup-helper",
     "platforms": [
       "ios",
       "android",
