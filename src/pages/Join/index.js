@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -9,24 +9,37 @@ import SetupHeader from "../../components/SetupHeader";
 import ActionButton from "../../components/ActionButton";
 import RulesBox from "../../components/RulesBox";
 
+import { getRegrasPartida } from "../../services/rulesService";
+
 export default function Join() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const nomeJogador = route.params.nomeJogador;
   
-  const [idParitda, setIdPartida] = useState("");
+  const [codigoPartida, setCodigoPartida] = useState("");
   const [codigoValido, setCodigoValido] = useState(false);
-  const [regras, setRegras] = useState();
+  const [regras, setRegras] = useState(undefined);
 
-  useEffect(() => {
-    //TODO: consumir da API
-    const rules = {
-      qtdCartasBaralho: 20,
-      qtdCartasJogador: 8,
-      qtdMoedasJogador: 2,
-    };
+  async function handleSearch(codigo) {
+    setCodigoPartida(codigo);
 
-    setRegras(rules);
-    setCodigoValido(true);
-  }, [idParitda]); //TODO add debounce
+    if (codigo.length > 4) {
+      setCodigoPartida(codigo);
+
+      const regras = await getRegrasPartida(codigo);
+      console.log(regras);
+      if (regras.error) {
+        setRegras(undefined);
+        setCodigoValido(false);
+        console.log(regras.error);
+        //TODO! mensagem erro
+      } else {
+        setRegras(regras);
+        setCodigoValido(true);
+      }
+    }
+  }
 
   function handleJoin() {
     //TODO: navegar para partida
@@ -41,9 +54,9 @@ export default function Join() {
         <Text style={defaultStyles.formLabel}>Código da Partida</Text>
         <TextInput
           style={[defaultStyles.formInput, styles.formInput]}
-          value={idParitda}
+          value={codigoPartida}
           placeholder="Digite o código da partida"
-          onChangeText={setIdPartida}
+          onChangeText={(id) => handleSearch(id)}
           autoFocus={true}
         />
 

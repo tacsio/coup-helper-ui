@@ -9,24 +9,29 @@ import SetupHeader from "../../components/SetupHeader";
 import RulexBox from "../../components/RulesBox";
 import ActionButton from "../../components/ActionButton";
 
-import { getRules } from "../../services/rulesService";
+import { getRegrasCriacao } from "../../services/rulesService";
 
 export default function Create() {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const nomeJogador = route.params.nomeJogador;
+
   const [numeroJogadores, setNumeroJogadores] = useState("3");
   const [regras, setRegras] = useState({});
 
   useEffect(() => {
-    getRules(numeroJogadores)
+    getRegrasCriacao(numeroJogadores)
       .then((response) => setRegras(response.data))
       .catch((error) => {
         console.log(error);
+        //! TODO: codigo de erro
       });
   }, [numeroJogadores]);
 
   function handleCreate() {
+    //TODO: criar partida
+    //TODO: adicionar jogador criador a partida
     //TODO: navegar para partida
     console.log("create");
     navigation.navigate("Game");
