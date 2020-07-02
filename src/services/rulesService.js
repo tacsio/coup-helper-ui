@@ -1,11 +1,14 @@
 import api from "./apiConfig";
 
-export async function getRegrasCriacao(playersNumber) {
-  const response = await api.get("/rules", {
-    params: { playersNumber },
-  });
+import parseError from "./utils/parserApiErrors";
 
-  return response;
+export async function getRegrasCriacao(playersNumber) {
+  try {
+    const response = await api.get("/rules", { params: { playersNumber } });
+    return response.data;
+  } catch (e) {
+    return Promise.reject(parseError(e));
+  }
 }
 
 export async function getRegrasPartida(codigoPartida) {
@@ -13,8 +16,6 @@ export async function getRegrasPartida(codigoPartida) {
     const response = await api.get(`/rules/${codigoPartida}`);
     return response.data;
   } catch (e) {
-    return {
-      error: "Partida não encontrada.",
-    };
+    return Promise.reject(parseError(e));
   }
 }
