@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 import styles from "./styles";
 import defaultStyles from "../defaultStyles";
@@ -16,7 +17,7 @@ export default function Join() {
   const route = useRoute();
 
   const nomeJogador = route.params.nomeJogador;
-  
+
   const [codigoPartida, setCodigoPartida] = useState("");
   const [codigoValido, setCodigoValido] = useState(false);
   const [regras, setRegras] = useState(undefined);
@@ -27,16 +28,19 @@ export default function Join() {
     if (codigo.length > 4) {
       setCodigoPartida(codigo);
 
-      const regras = await getRegrasPartida(codigo);
-      console.log(regras);
-      if (regras.error) {
+      try {
+        const response = await getRegrasPartida(codigo);
+        setRegras(response);
+        setCodigoValido(true);
+      } catch (error) {
         setRegras(undefined);
         setCodigoValido(false);
-        console.log(regras.error);
-        //TODO! mensagem erro
-      } else {
-        setRegras(regras);
-        setCodigoValido(true);
+        showMessage({
+          message: error,
+          type: "danger",
+          duration: 3000,
+          icon: "danger",
+        });
       }
     }
   }
@@ -70,6 +74,8 @@ export default function Join() {
           onPress={() => handleJoin()}
         />
       </View>
+
+      <FlashMessage position="bottom" />
     </View>
   );
 }
