@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { View, Text, ScrollView } from "react-native";
 
 import styles from "./styles";
 
 import HeaderNavigation from "../../components/HeaderNavigation";
-import OpponentCard from "../../components/OpponentCard";
-import PlayerCard from "../../components/PlayerCard";
+import PlayerAction from "../../components/PlayerAction";
 import ActionButton from "../../components/ActionButton";
+import AmbassadorBox from "../../components/AmbassadorBox";
+import OpponentBox from "../../components/OpponentBox";
 
 export default function Game() {
   const [codigoPartida, setCodigoPartida] = useState();
   const [opponents, setOpponents] = useState([]);
+  const [ambassadorActionVisible, setAmbassadorActionVisible] = useState(
+    !false
+  ); //TODO: default false
 
   //carrega id partida da rota
   useEffect(() => {
@@ -61,6 +64,11 @@ export default function Game() {
     setOpponents(op);
   }, []);
 
+  function handleAmbassadorAction() {
+    console.log("embaixador");
+    setAmbassadorActionVisible(!ambassadorActionVisible);
+  }
+
   return (
     <View style={styles.container}>
       <HeaderNavigation codigoPartida={codigoPartida} />
@@ -75,38 +83,14 @@ export default function Game() {
           <Text style={styles.playerName}>Misaka Mikoto </Text>
         </View>
 
-        <ScrollView>
-          <View style={styles.opponents}>
-            {opponents.map((opponent) => (
-              <OpponentCard key={opponent.id} opponent={opponent} />
-            ))}
-          </View>
+        <ScrollView style={styles.actionArea}>
+          {ambassadorActionVisible ? (
+            <AmbassadorBox />
+          ) : (
+            <OpponentBox opponents={opponents} />
+          )}
 
-          <View style={styles.playerAction}>
-            <View style={styles.playerInfo}>
-              <Text style={styles.playerCoin}>
-                5
-                <Feather size={10} name="dollar-sign" />
-              </Text>
-
-              <TouchableOpacity style={[styles.coinAction, styles.plusAction]}>
-                <Feather name="plus" size={15} color="#FFF" />
-              </TouchableOpacity>
-
-              <TouchableOpacity style={[styles.coinAction, styles.minusAction]}>
-                <Feather name="minus" size={15} color="#FFF" />
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.ambassadorAction}>
-                <Feather name="inbox" size={32} color="#FFF" />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.playerCards}>
-              <PlayerCard />
-              <PlayerCard />
-            </View>
-          </View>
+          <PlayerAction ambassadorHandler={handleAmbassadorAction} />
         </ScrollView>
       </View>
 
