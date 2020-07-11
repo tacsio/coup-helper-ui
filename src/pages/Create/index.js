@@ -11,6 +11,7 @@ import RulexBox from "../../components/RulesBox";
 import ActionButton from "../../components/ActionButton";
 
 import { getRegrasCriacao } from "../../services/rulesService";
+import { createGame, joinGame } from "../../services/gameService";
 
 export default function Create() {
   const navigation = useNavigation();
@@ -40,12 +41,20 @@ export default function Create() {
       });
   }, [numeroJogadores]);
 
-  function handleCreate() {
-    //TODO: criar partida
-    //TODO: adicionar jogador criador a partida
-    //TODO: navegar para partida
-    console.log("create");
-    navigation.navigate("Game");
+  async function handleCreate() {
+    try {
+      const { codigoPartida } = await createGame(numeroJogadores);
+      const statusPartida = await joinGame(codigoPartida, nomeJogador);
+
+      navigation.navigate("Game", { statusPartida });
+    } catch (error) {
+      showMessage({
+        message: error,
+        type: "danger",
+        duration: 3000,
+        icon: "danger",
+      });
+    }
   }
 
   return (
@@ -67,6 +76,8 @@ export default function Create() {
       </View>
 
       <View style={defaultStyles.actions}>
+        <ActionButton text="Voltar" onPress={() => navigation.goBack()} />
+
         <ActionButton
           disabled={regras === undefined}
           text="Criar"

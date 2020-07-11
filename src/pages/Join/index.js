@@ -11,6 +11,7 @@ import ActionButton from "../../components/ActionButton";
 import RulesBox from "../../components/RulesBox";
 
 import { getRegrasPartida } from "../../services/rulesService";
+import { joinGame } from "../../services/gameService";
 
 export default function Join() {
   const navigation = useNavigation();
@@ -45,11 +46,20 @@ export default function Join() {
     }
   }
 
-  function handleJoin() {
-    //TODO: navegar para partida
-    console.log("join");
-    navigation.navigate("Game");
+  async function handleJoin() {
+    try {
+      const statusPartida = await joinGame(codigoPartida, nomeJogador);
+      navigation.navigate("Game", { statusPartida });
+    } catch (error) {
+      showMessage({
+        message: error,
+        type: "danger",
+        duration: 3000,
+        icon: "danger",
+      });
+    }
   }
+
   return (
     <View style={defaultStyles.container}>
       <SetupHeader />
@@ -60,7 +70,7 @@ export default function Join() {
           style={[defaultStyles.formInput, styles.formInput]}
           value={codigoPartida}
           placeholder="Digite o código da partida"
-          onChangeText={(id) => handleSearch(id)}
+          onChangeText={(id) => handleSearch(id.trim())}
           autoFocus={true}
         />
 
@@ -68,6 +78,8 @@ export default function Join() {
       </View>
 
       <View style={defaultStyles.actions}>
+        <ActionButton text="Voltar" onPress={() => navigation.goBack()} />
+
         <ActionButton
           disabled={codigoValido === false}
           text="Entrar"

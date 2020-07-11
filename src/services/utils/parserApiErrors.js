@@ -6,8 +6,6 @@ export default function parseError(error) {
   const status = error.response.status;
   const data = error.response.data;
 
-  console.log(data);
-  console.log(status);
   let parsedErrors = [];
 
   if (status === 400) {
@@ -15,6 +13,8 @@ export default function parseError(error) {
       const formatted = `${it.name}: ${it.error}`;
       parsedErrors.push(formatted);
     });
+  } else if (status === 403) {
+    parsedErrors.push(data.error);
   }
 
   //* TODO melhorar parsing dos erros
