@@ -9,6 +9,9 @@ import ActionButton from "../../components/ActionButton";
 import AmbassadorBox from "../../components/AmbassadorBox";
 import OpponentBox from "../../components/OpponentBox";
 
+//! TODO: remover (vir pela API)
+const newCards = ["Capitão", "Duque", "Embaixador", "Condessa"];
+
 export default function Game() {
   const [codigoPartida, setCodigoPartida] = useState();
   const [opponents, setOpponents] = useState([]);
@@ -83,15 +86,17 @@ export default function Game() {
           <Text style={styles.playerName}>Misaka Mikoto </Text>
         </View>
 
-        <ScrollView style={styles.actionArea}>
+        <ScrollView
+          contentContainerStyle={styles.actionContainer}
+          style={styles.actionArea}
+        >
           {ambassadorActionVisible ? (
-            <AmbassadorBox />
+            <AmbassadorBox cards={newCards} />
           ) : (
             <OpponentBox opponents={opponents} />
           )}
-
-          <PlayerAction ambassadorHandler={handleAmbassadorAction} />
         </ScrollView>
+        <PlayerAction ambassadorHandler={handleAmbassadorAction} />
       </View>
 
       <View style={styles.action}>

@@ -44,7 +44,11 @@ export default StyleSheet.create({
   },
 
   actionArea: {
-    paddingTop: 5,
+    paddingTop: 10,
+  },
+
+  actionContainer: {
+    flex: 1,
   },
 
   action: {
