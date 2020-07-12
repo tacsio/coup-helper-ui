@@ -26,3 +26,20 @@ export async function joinGame(gameCode, playerName) {
     return Promise.reject(parseError(e));
   }
 }
+
+export const quitGame = async (gameCode, playerId) => {
+  try {
+    const payload = {
+      data: {
+        codigoPartida: gameCode,
+        idJogador: playerId,
+      },
+    };
+    const response = await api.delete("/quit", payload);
+
+    return response.data;
+  } catch (e) {
+    console.log("api", e);
+    return Promise.reject(parseError(e));
+  }
+};
