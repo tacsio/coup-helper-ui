@@ -1,7 +1,12 @@
 import React from "react";
 
 import Routes from "./src/Routes";
+import { GameProvider } from "./src/GameContext";
 
 export default function App() {
-  return <Routes />;
+  return (
+    <GameProvider>
+      <Routes />
+    </GameProvider>
+  );
 }

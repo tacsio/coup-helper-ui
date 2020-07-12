@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, TextInput } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import GameContext from "../../GameContext";
 
 import styles from "./styles";
 import defaultStyles from "../defaultStyles";
@@ -14,6 +15,8 @@ import { getRegrasPartida } from "../../services/rulesService";
 import { joinGame } from "../../services/gameService";
 
 export default function Join() {
+  const { signGame } = useContext(GameContext);
+
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -49,6 +52,10 @@ export default function Join() {
   async function handleJoin() {
     try {
       const statusPartida = await joinGame(codigoPartida, nomeJogador);
+      await signGame({
+        gameCode: statusPartida.codigoPartida,
+        playerId: statusPartida.idJogador,
+      });
       navigation.navigate("Game", { statusPartida });
     } catch (error) {
       showMessage({

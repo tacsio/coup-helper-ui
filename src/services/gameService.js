@@ -43,3 +43,14 @@ export const quitGame = async (gameCode, playerId) => {
     return Promise.reject(parseError(e));
   }
 };
+
+export const gameStatus = async (gameCode, playerId) => {
+  try {
+    const response = await api.get(`/status/${gameCode}/${playerId}`);
+    
+    return response.data;
+  } catch (e) {
+    console.log("api", e);
+    return Promise.reject(parseError(e));
+  }
+};

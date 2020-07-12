@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import GameContext from "../../GameContext";
 
 import styles from "./styles";
 
@@ -11,12 +12,14 @@ import ActionButton from "../../components/ActionButton";
 import AmbassadorBox from "../../components/AmbassadorBox";
 import OpponentBox from "../../components/OpponentBox";
 
-import { quitGame } from "../../services/gameService";
+import { gameStatus, quitGame } from "../../services/gameService";
 
 //! TODO: remover (vir pela API)
 const newCards = ["Capitão", "Duque", "Embaixador", "Condessa"];
 
 export default function Game() {
+  const { signOutGame } = useContext(GameContext);
+
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -34,12 +37,23 @@ export default function Game() {
     setAmbassadorActionVisible(!ambassadorActionVisible);
   }
 
+  async function handleUpdateGame() {
+    const { codigoPartida, idJogador } = statusPartida;
+    try {
+      const newStatus = await gameStatus(codigoPartida, idJogador);
+      setStatusPartida(newStatus);
+    } catch (error) {
+      console.error("could not update");
+    }
+  }
+
   async function handleQuitGame() {
     const { codigoPartida, idJogador } = statusPartida;
     try {
       const out = await quitGame(codigoPartida, idJogador);
       if (out) {
         //* TODO: poderia melhorar aqui com msg para a Home
+        signOutGame();
         navigation.navigate("Home");
       }
     } catch (error) {
@@ -57,6 +71,7 @@ export default function Game() {
     <View style={styles.container}>
       <HeaderNavigation
         codigoPartida={statusPartida.codigoPartida}
+        handleUpdate={handleUpdateGame}
         handleQuit={handleQuitGame}
       />
 

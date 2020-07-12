@@ -4,14 +4,18 @@ import { Feather } from "@expo/vector-icons";
 
 import styles from "./styles";
 
-export default function HeaderNavigation({ codigoPartida, handleQuit }) {
+export default function HeaderNavigation({
+  codigoPartida,
+  handleUpdate,
+  handleQuit,
+}) {
   function handleClipboard() {
     Clipboard.setString(codigoPartida);
   }
 
   return (
     <View style={styles.navigation}>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity onPress={() => handleUpdate()}>
         <Feather name="refresh-ccw" color="#402160" size={32} />
       </TouchableOpacity>
 
