@@ -12,7 +12,12 @@ import ActionButton from "../../components/ActionButton";
 import AmbassadorBox from "../../components/AmbassadorBox";
 import OpponentBox from "../../components/OpponentBox";
 
-import { gameStatus, quitGame } from "../../services/gameService";
+import {
+  gameStatus,
+  quitGame,
+  incrementCoin,
+  decrementCoin,
+} from "../../services/gameService";
 
 //! TODO: remover (vir pela API)
 const newCards = ["Capitão", "Duque", "Embaixador", "Condessa"];
@@ -26,16 +31,11 @@ export default function Game() {
   const [statusPartida, setStatusPartida] = useState({});
   const [ambassadorActionVisible, setAmbassadorActionVisible] = useState(false);
 
-  //initial statue
+  //initial state
   useEffect(() => {
     const initialState = route.params.statusPartida;
     setStatusPartida(initialState);
   }, []);
-
-  function handleAmbassadorAction() {
-    console.log("embaixador");
-    setAmbassadorActionVisible(!ambassadorActionVisible);
-  }
 
   async function handleUpdateGame() {
     const { codigoPartida, idJogador } = statusPartida;
@@ -47,6 +47,7 @@ export default function Game() {
     }
   }
 
+  /** Ingress actions **/
   async function handleQuitGame() {
     const { codigoPartida, idJogador } = statusPartida;
     try {
@@ -57,14 +58,38 @@ export default function Game() {
         navigation.navigate("Home");
       }
     } catch (error) {
-      console.log(error);
-      showMessage({
-        message: error,
-        type: "danger",
-        duration: 3000,
-        icon: "danger",
-      });
+      showMessage(error);
     }
+  }
+
+  /** Game actions **/
+  async function handleIncrementCoin() {
+    try {
+      const ammount = await incrementCoin(statusPartida.idJogador);
+
+      const newState = { ...statusPartida, moedas: ammount };
+      setStatusPartida(newState);
+    } catch (error) {
+      showMessage(error);
+    }
+  }
+
+  async function handleDecrementCoin() {
+    try {
+      const ammount = await decrementCoin(statusPartida.idJogador);
+
+      const newState = { ...statusPartida, moedas: ammount };
+      setStatusPartida(newState);
+    } catch (error) {
+      showMessage(error);
+    }
+  }
+
+  /** Ambassador actions **/
+  function handleAmbassadorAction() {
+    console.log("embaixador");
+    console.log(statusPartida);
+    setAmbassadorActionVisible(!ambassadorActionVisible);
   }
 
   return (
@@ -100,7 +125,12 @@ export default function Game() {
             />
           )}
         </ScrollView>
-        <PlayerAction ambassadorHandler={handleAmbassadorAction} />
+        <PlayerAction
+          ammount={statusPartida.moedas}
+          plusHandler={handleIncrementCoin}
+          minusHandler={handleDecrementCoin}
+          ambassadorHandler={handleAmbassadorAction}
+        />
       </View>
 
       <View style={styles.action}>

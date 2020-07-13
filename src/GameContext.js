@@ -10,12 +10,12 @@ export const GameProvider = ({ children }) => {
   const storedData = localStorage.getItem("game");
   const gameAuth = storedData ? JSON.parse(storedData) : null;
 
-  const signGame = async (gameInfo) => {
+  const signGame = (gameInfo) => {
     const json = JSON.stringify(gameInfo);
     localStorage.setItem("game", json);
   };
 
-  const signOutGame = async () => {
+  const signOutGame = () => {
     localStorage.clear();
   };
 

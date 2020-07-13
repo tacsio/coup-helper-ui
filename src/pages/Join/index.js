@@ -39,12 +39,7 @@ export default function Join() {
       } catch (error) {
         setRegras(undefined);
         setCodigoValido(false);
-        showMessage({
-          message: error,
-          type: "danger",
-          duration: 3000,
-          icon: "danger",
-        });
+        showMessage(error);
       }
     }
   }
@@ -52,18 +47,13 @@ export default function Join() {
   async function handleJoin() {
     try {
       const statusPartida = await joinGame(codigoPartida, nomeJogador);
-      await signGame({
+      signGame({
         gameCode: statusPartida.codigoPartida,
         playerId: statusPartida.idJogador,
       });
       navigation.navigate("Game", { statusPartida });
     } catch (error) {
-      showMessage({
-        message: error,
-        type: "danger",
-        duration: 3000,
-        icon: "danger",
-      });
+      showMessage(error);
     }
   }
 

@@ -1,4 +1,6 @@
 export default function parseError(error) {
+  console.log(error);
+
   if (error.response === undefined) {
     return ["Unable to connect with service."];
   }
@@ -8,16 +10,19 @@ export default function parseError(error) {
 
   let parsedErrors = [];
 
+  //* TODO melhorar parsing dos erros
   if (status === 400) {
-    data.forEach((it) => {
-      const formatted = `${it.name}: ${it.error}`;
-      parsedErrors.push(formatted);
-    });
+    data.forEach((it) => parsedErrors.push(`${it.name}: ${it.error}`));
   } else if (status === 403) {
     parsedErrors.push(data.error);
   }
 
-  //* TODO melhorar parsing dos erros
+  const errorObj = {
+    message: parsedErrors.join(" "),
+    type: "danger",
+    duration: 3000,
+    icon: "danger",
+  };
 
-  return parsedErrors;
+  return errorObj;
 }

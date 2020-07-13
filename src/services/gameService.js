@@ -2,7 +2,8 @@ import api from "./apiConfig";
 
 import parseError from "./utils/parserApiErrors";
 
-export async function createGame(playersNumber) {
+/** Game ingress **/
+const createGame = async (playersNumber) => {
   try {
     const response = await api.post("/game", {
       numeroJogadores: playersNumber,
@@ -12,9 +13,9 @@ export async function createGame(playersNumber) {
   } catch (e) {
     return Promise.reject(parseError(e));
   }
-}
+};
 
-export async function joinGame(gameCode, playerName) {
+const joinGame = async (gameCode, playerName) => {
   try {
     const response = await api.post("/sign-in", {
       codigoPartida: gameCode,
@@ -25,9 +26,9 @@ export async function joinGame(gameCode, playerName) {
   } catch (e) {
     return Promise.reject(parseError(e));
   }
-}
+};
 
-export const quitGame = async (gameCode, playerId) => {
+const quitGame = async (gameCode, playerId) => {
   try {
     const payload = {
       data: {
@@ -39,18 +40,49 @@ export const quitGame = async (gameCode, playerId) => {
 
     return response.data;
   } catch (e) {
-    console.log("api", e);
     return Promise.reject(parseError(e));
   }
 };
 
-export const gameStatus = async (gameCode, playerId) => {
+/** Game status **/
+const gameStatus = async (gameCode, playerId) => {
   try {
     const response = await api.get(`/status/${gameCode}/${playerId}`);
-    
+
     return response.data;
   } catch (e) {
-    console.log("api", e);
     return Promise.reject(parseError(e));
   }
+};
+
+/** Coin management **/
+const incrementCoin = async (playerId) => {
+  try {
+    const response = await api.put(`/coins/increment?idJogador=${playerId}`);
+    const { quantidade } = response.data;
+
+    return quantidade;
+  } catch (e) {
+    return Promise.reject(parseError(e));
+  }
+};
+
+const decrementCoin = async (playerId) => {
+  try {
+    const response = await api.put(`/coins/decrement?idJogador=${playerId}`);
+    const { quantidade } = response.data;
+
+    return quantidade;
+  } catch (e) {
+    return Promise.reject(parseError(e));
+  }
+};
+
+export {
+  createGame,
+  joinGame,
+  quitGame,
+  gameStatus,
+  incrementCoin,
+  decrementCoin,
 };

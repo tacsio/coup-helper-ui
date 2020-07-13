@@ -24,17 +24,8 @@ export default function Home() {
       const { gameCode, playerId } = gameAuth;
 
       gameStatus(gameCode, playerId)
-        .then((statusPartida) => {
-          navigation.navigate("Game", { statusPartida });
-        })
-        .catch((error) => {
-          showMessage({
-            message: error,
-            type: "danger",
-            duration: 3000,
-            icon: "danger",
-          });
-        });
+        .then((statusPartida) => navigation.navigate("Game", { statusPartida }))
+        .catch((error) => showMessage(error));
     }
   }, [gameAuth]);
 

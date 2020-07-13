@@ -35,12 +35,7 @@ export default function Create() {
       .then((response) => setRegras(response))
       .catch((error) => {
         setRegras(undefined);
-        showMessage({
-          message: error,
-          type: "danger",
-          duration: 3000,
-          icon: "danger",
-        });
+        showMessage(error);
       });
   }, [numeroJogadores]);
 
@@ -48,18 +43,13 @@ export default function Create() {
     try {
       const { codigoPartida } = await createGame(numeroJogadores);
       const statusPartida = await joinGame(codigoPartida, nomeJogador);
-      await signGame({
+      signGame({
         gameCode: statusPartida.codigoPartida,
         playerId: statusPartida.idJogador,
       });
       navigation.navigate("Game", { statusPartida });
     } catch (error) {
-      showMessage({
-        message: error,
-        type: "danger",
-        duration: 3000,
-        icon: "danger",
-      });
+      showMessage(error);
     }
   }
 
