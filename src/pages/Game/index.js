@@ -17,6 +17,7 @@ import {
   quitGame,
   incrementCoin,
   decrementCoin,
+  endMyRound,
 } from "../../services/gameService";
 
 //! TODO: remover (vir pela API)
@@ -29,6 +30,7 @@ export default function Game() {
   const route = useRoute();
 
   const [statusPartida, setStatusPartida] = useState({});
+  const [myRound, setMyRound] = useState(false);
   const [ambassadorActionVisible, setAmbassadorActionVisible] = useState(false);
 
   //initial state
@@ -36,6 +38,14 @@ export default function Game() {
     const initialState = route.params.statusPartida;
     setStatusPartida(initialState);
   }, []);
+
+  //define jogador da vez
+  useEffect(() => {
+    const idJogador = statusPartida.idJogador;
+    const idJogadorDaVez = statusPartida.idJogadorDaVez;
+
+    setMyRound(idJogadorDaVez && idJogador === idJogadorDaVez);
+  }, [statusPartida]);
 
   async function handleUpdateGame() {
     const { codigoPartida, idJogador } = statusPartida;
@@ -85,6 +95,15 @@ export default function Game() {
     }
   }
 
+  async function handleEndMyRound() {
+    try {
+      const newState = await endMyRound(statusPartida.idJogador);
+      setStatusPartida(newState);
+    } catch (error) {
+      showMessage(error);
+    }
+  }
+
   /** Ambassador actions **/
   function handleAmbassadorAction() {
     console.log("embaixador");
@@ -106,10 +125,15 @@ export default function Game() {
 
       <View style={styles.main}>
         <View style={styles.roundInfo}>
-          <Text style={styles.labelRound}>Rodada de </Text>
-          <Text style={styles.playerName}>
-            {statusPartida.nomeJogadorDaVez}
-          </Text>
+          {myRound ? (
+            <Text style={styles.labelRound}>
+              Sua rodada, {statusPartida.nomeJogadorDaVez}
+            </Text>
+          ) : (
+            <Text style={styles.labelRound}>
+              Rodada de {statusPartida.nomeJogadorDaVez}
+            </Text>
+          )}
         </View>
 
         <ScrollView
@@ -130,11 +154,16 @@ export default function Game() {
           plusHandler={handleIncrementCoin}
           minusHandler={handleDecrementCoin}
           ambassadorHandler={handleAmbassadorAction}
+          myRound={myRound}
         />
       </View>
 
       <View style={styles.action}>
-        <ActionButton text="Finalizar Turno" />
+        <ActionButton
+          text="Finalizar Turno"
+          disabled={!myRound}
+          onPress={handleEndMyRound}
+        />
       </View>
 
       <FlashMessage position="bottom" />

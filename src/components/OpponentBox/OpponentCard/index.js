@@ -7,9 +7,11 @@ import styles from "./styles";
 export default function OpponentCard({ selected, opponent }) {
   return (
     <View
-      style={
-        selected ? [styles.card, styles.selected] : [styles.card, styles.normal]
-      }
+      style={[
+        styles.card,
+        selected ? styles.selected : styles.normal,
+        opponent.eliminado && styles.terminated,
+      ]}
     >
       <Text style={styles.name}>{opponent.nome}</Text>
 

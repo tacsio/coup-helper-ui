@@ -36,13 +36,6 @@ export default StyleSheet.create({
     color: "#402160",
   },
 
-  playerName: {
-    fontSize: 17,
-    lineHeight: 21,
-    fontWeight: "bold",
-    color: "#402160",
-  },
-
   actionArea: {
     paddingTop: 10,
   },

@@ -21,6 +21,12 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
 
+  disabled: {
+    backgroundColor: "#E5E5E5",
+    padding: 3,
+    borderRadius: 5,
+  },
+
   playerCoin: {
     fontWeight: "bold",
     fontSize: 18,

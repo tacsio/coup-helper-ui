@@ -78,6 +78,16 @@ const decrementCoin = async (playerId) => {
   }
 };
 
+const endMyRound = async (playerId) => {
+  try {
+    const response = await api.put(`/round/${playerId}`);
+
+    return response.data;
+  } catch (e) {
+    return Promise.reject(parseError(e));
+  }
+};
+
 export {
   createGame,
   joinGame,
@@ -85,4 +95,5 @@ export {
   gameStatus,
   incrementCoin,
   decrementCoin,
+  endMyRound,
 };

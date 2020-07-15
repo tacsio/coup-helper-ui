@@ -16,6 +16,10 @@ export default StyleSheet.create({
     backgroundColor: "#402160",
   },
 
+  terminated: {
+    backgroundColor: "#b5b5b5",
+  },
+
   name: {
     color: "#FFF",
     fontSize: 17,

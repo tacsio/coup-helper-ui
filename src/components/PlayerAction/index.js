@@ -11,6 +11,7 @@ export default function PlayerAction({
   plusHandler,
   minusHandler,
   ambassadorHandler,
+  myRound,
 }) {
   return (
     <View style={styles.playerAction}>
@@ -35,8 +36,9 @@ export default function PlayerAction({
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.ambassadorAction}
+          style={myRound ? styles.ambassadorAction : styles.disabled}
           onPress={ambassadorHandler}
+          disabled={!myRound}
         >
           <Feather name="inbox" size={32} color="#FFF" />
         </TouchableOpacity>
