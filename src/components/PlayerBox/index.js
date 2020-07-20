@@ -6,12 +6,15 @@ import PlayerCard from "./PlayerCard";
 
 import styles from "./styles";
 
-export default function PlayerAction({
+export default function PlayerBox({
+  cards,
   ammount,
   plusHandler,
   minusHandler,
   ambassadorHandler,
   myRound,
+  uncoverCard,
+  terminateCard,
 }) {
   return (
     <View style={styles.playerAction}>
@@ -45,8 +48,15 @@ export default function PlayerAction({
       </View>
 
       <View style={styles.playerCards}>
-        <PlayerCard />
-        <PlayerCard />
+        {cards &&
+          cards.map((card) => (
+            <PlayerCard
+              key={card.id}
+              card={card}
+              uncoverCard={uncoverCard}
+              terminateCard={terminateCard}
+            />
+          ))}
       </View>
     </View>
   );

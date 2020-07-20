@@ -7,7 +7,7 @@ import GameContext from "../../GameContext";
 import styles from "./styles";
 
 import HeaderNavigation from "../../components/HeaderNavigation";
-import PlayerAction from "../../components/PlayerAction";
+import PlayerBox from "../../components/PlayerBox";
 import ActionButton from "../../components/ActionButton";
 import AmbassadorBox from "../../components/AmbassadorBox";
 import OpponentBox from "../../components/OpponentBox";
@@ -18,6 +18,8 @@ import {
   incrementCoin,
   decrementCoin,
   endMyRound,
+  uncoverCard,
+  terminateCard,
 } from "../../services/gameService";
 
 //! TODO: remover (vir pela API)
@@ -104,6 +106,25 @@ export default function Game() {
     }
   }
 
+  /** Card actions **/
+  async function handleUncoverCard(idCard) {
+    try {
+      const newState = await uncoverCard(statusPartida.idJogador, idCard);
+      setStatusPartida(newState);
+    } catch (error) {
+      showMessage(error);
+    }
+  }
+
+  async function handleTerminateCard(idCard) {
+    try {
+      const newState = await terminateCard(statusPartida.idJogador, idCard);
+      setStatusPartida(newState);
+    } catch (error) {
+      showMessage(error);
+    }
+  }
+
   /** Ambassador actions **/
   function handleAmbassadorAction() {
     console.log("embaixador");
@@ -149,12 +170,15 @@ export default function Game() {
             />
           )}
         </ScrollView>
-        <PlayerAction
+        <PlayerBox
+          cards={statusPartida.cartas}
           ammount={statusPartida.moedas}
           plusHandler={handleIncrementCoin}
           minusHandler={handleDecrementCoin}
           ambassadorHandler={handleAmbassadorAction}
           myRound={myRound}
+          uncoverCard={(idCard) => handleUncoverCard(idCard)}
+          terminateCard={(idCard) => handleTerminateCard(idCard)}
         />
       </View>
 

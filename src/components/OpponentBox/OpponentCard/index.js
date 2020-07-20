@@ -17,8 +17,11 @@ export default function OpponentCard({ selected, opponent }) {
 
       <View style={styles.info}>
         <View style={styles.cards}>
-          <Text style={styles.cardName}>{opponent.cartas[0]}</Text>
-          <Text style={styles.cardName}>{opponent.cartas[1]}</Text>
+          {opponent.cartas.map((carta) => (
+            <Text key={carta.id} style={styles.cardName}>
+              {carta.name}
+            </Text>
+          ))}
         </View>
 
         <Text style={styles.coins}>
