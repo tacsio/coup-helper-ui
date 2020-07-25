@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import { FontAwesome5 } from "@expo/vector-icons";
 import GameContext from "../../GameContext";
 
 import styles from "./styles";
@@ -20,6 +21,7 @@ import {
   endMyRound,
   uncoverCard,
   terminateCard,
+  changeCard,
 } from "../../services/gameService";
 
 //! TODO: remover (vir pela API)
@@ -34,6 +36,7 @@ export default function Game() {
   const [statusPartida, setStatusPartida] = useState({});
   const [myRound, setMyRound] = useState(false);
   const [ambassadorActionVisible, setAmbassadorActionVisible] = useState(false);
+  const [winner, setWinner] = useState(undefined);
 
   //initial state
   useEffect(() => {
@@ -47,7 +50,37 @@ export default function Game() {
     const idJogadorDaVez = statusPartida.idJogadorDaVez;
 
     setMyRound(idJogadorDaVez && idJogador === idJogadorDaVez);
+    searchWinner();
   }, [statusPartida]);
+
+  function getRoundTitle() {
+    let title = "";
+    if (winner) {
+      title = `Vencedor: ${winner.nome}`;
+    } else if (statusPartida.idJogadorDaVez === -1) {
+      title = "Aguardando jogadores";
+    } else {
+      const playerName = statusPartida.nomeJogadorDaVez;
+      title = myRound ? `Sua rodada, ${playerName}` : `Rodada de ${playerName}`;
+    }
+
+    return title;
+  }
+  function searchWinner() {
+    if (statusPartida.statusPartida === "FINALIZADA") {
+      const players = [
+        ...statusPartida.adversarios,
+        {
+          nome: statusPartida.nomeJogador,
+          eliminado: statusPartida.eliminado,
+        },
+      ];
+      const winner = players.find((player) => !player.eliminado);
+      setWinner(winner);
+    }
+
+    return undefined;
+  }
 
   async function handleUpdateGame() {
     const { codigoPartida, idJogador } = statusPartida;
@@ -125,6 +158,15 @@ export default function Game() {
     }
   }
 
+  async function handleChangeCard(idCard) {
+    try {
+      const newState = await changeCard(statusPartida.idJogador, idCard);
+      setStatusPartida(newState);
+    } catch (error) {
+      showMessage(error);
+    }
+  }
+
   /** Ambassador actions **/
   function handleAmbassadorAction() {
     console.log("embaixador");
@@ -141,20 +183,23 @@ export default function Game() {
       />
 
       <View style={styles.header}>
-        <Text style={styles.title}>Social Isolation COUP</Text>
+        <Text style={styles.title}>
+          Social Isolation COUP{" "}
+          <FontAwesome5 name="chess" color="#402160" size={34} />
+        </Text>
       </View>
 
       <View style={styles.main}>
         <View style={styles.roundInfo}>
-          {myRound ? (
-            <Text style={styles.labelRound}>
-              Sua rodada, {statusPartida.nomeJogadorDaVez}
-            </Text>
-          ) : (
-            <Text style={styles.labelRound}>
-              Rodada de {statusPartida.nomeJogadorDaVez}
-            </Text>
-          )}
+          <Text style={styles.labelRound}>
+            {winner && <FontAwesome5 name="crown" color="#402160" size={21} />}{" "}
+            {getRoundTitle()}{" "}
+            {winner && <FontAwesome5 name="crown" color="#402160" size={21} />}
+            {!winner && !myRound && (
+              <FontAwesome5 name="clock" color="#402160" size={21} />
+            )}
+            {myRound && <FontAwesome5 name="dice" color="#402160" size={21} />}
+          </Text>
         </View>
 
         <ScrollView
@@ -179,6 +224,7 @@ export default function Game() {
           myRound={myRound}
           uncoverCard={(idCard) => handleUncoverCard(idCard)}
           terminateCard={(idCard) => handleTerminateCard(idCard)}
+          changeCard={(idCard) => handleChangeCard(idCard)}
         />
       </View>
 

@@ -3,7 +3,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
 
-export default function PlayerCard({ card, uncoverCard, terminateCard }) {
+export default function PlayerCard({
+  card,
+  uncoverCard,
+  terminateCard,
+  changeCard,
+}) {
   const oculta = card.status === "OCULTA";
   const revelada = card.status === "REVELADA";
 
@@ -29,6 +34,7 @@ export default function PlayerCard({ card, uncoverCard, terminateCard }) {
       <TouchableOpacity
         disabled={card.status !== "REVELADA"}
         style={styles.actionButton}
+        onPress={() => changeCard(card.id)}
       >
         <Text style={revelada ? styles.actionButtonText : styles.disabledText}>
           Trocar

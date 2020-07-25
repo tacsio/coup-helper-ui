@@ -15,6 +15,7 @@ export default function PlayerBox({
   myRound,
   uncoverCard,
   terminateCard,
+  changeCard,
 }) {
   return (
     <View style={styles.playerAction}>
@@ -55,6 +56,7 @@ export default function PlayerBox({
               card={card}
               uncoverCard={uncoverCard}
               terminateCard={terminateCard}
+              changeCard={changeCard}
             />
           ))}
       </View>

@@ -48,7 +48,7 @@ const quitGame = async (gameCode, playerId) => {
 const gameStatus = async (gameCode, playerId) => {
   try {
     const response = await api.get(`/status/${gameCode}/${playerId}`);
-    console.log(response.data); //TODO!: remover
+
     return response.data;
   } catch (e) {
     return Promise.reject(parseError(e));
@@ -108,6 +108,18 @@ const terminateCard = async (playerId, cardId) => {
   }
 };
 
+const changeCard = async (playerId, cardId) => {
+  try {
+    const response = await api.put(
+      `/card/change?idJogador=${playerId}&idCarta=${cardId}`
+    );
+
+    return response.data;
+  } catch (e) {
+    return Promise.reject(parseError(e));
+  }
+};
+
 export {
   createGame,
   joinGame,
@@ -118,4 +130,5 @@ export {
   endMyRound,
   uncoverCard,
   terminateCard,
+  changeCard,
 };
