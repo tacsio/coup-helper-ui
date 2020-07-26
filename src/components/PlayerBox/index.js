@@ -12,6 +12,7 @@ export default function PlayerBox({
   plusHandler,
   minusHandler,
   ambassadorHandler,
+  ambassadorActionEnabled,
   myRound,
   uncoverCard,
   terminateCard,
@@ -40,9 +41,9 @@ export default function PlayerBox({
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={myRound ? styles.ambassadorAction : styles.disabled}
+          style={ambassadorActionEnabled ? styles.ambassadorAction : styles.disabled}
           onPress={ambassadorHandler}
-          disabled={!myRound}
+          disabled={!ambassadorActionEnabled}
         >
           <Feather name="inbox" size={32} color="#FFF" />
         </TouchableOpacity>
