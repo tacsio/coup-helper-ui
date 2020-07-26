@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
 
-export default function AmbassadorBox({ cards }) {
+export default function AmbassadorBox({ cards, handleChangeCards }) {
   const selections = cards.length - 2;
 
   const [selectedCards, setSelectedCards] = useState([]);
 
-  function handleSelectCards(card) {
-    let cards = [...selectedCards.filter((it) => it !== card)];
+  function handleSelectCards(cardId) {
+    let filteredCards = [...selectedCards.filter((it) => it !== cardId)];
 
-    if (!selectedCards.includes(card)) {
-      cards.push(card);
+    if (!selectedCards.includes(cardId)) {
+      filteredCards.push(cardId);
     }
-
-    setSelectedCards(cards);
+    setSelectedCards(filteredCards);
   }
 
   function selectionCompleted() {
     return selectedCards.length === selections;
+  }
+
+  function handleSelection() {
+    const returnedCardIds = cards
+      .filter((it) => !selectedCards.includes(it.id))
+      .map((it) => it.id);
+
+    handleChangeCards(returnedCardIds, selectedCards);
   }
 
   return (
@@ -31,23 +38,24 @@ export default function AmbassadorBox({ cards }) {
       <View style={styles.options}>
         {cards.map((card) => (
           <TouchableOpacity
-            key={card}
-            disabled={selectionCompleted() && !selectedCards.includes(card)}
+            key={card.id}
+            disabled={selectionCompleted() && !selectedCards.includes(card.id)}
             style={[
               styles.button,
-              selectedCards.includes(card)
+              selectedCards.includes(card.id)
                 ? styles.selected
                 : styles.notSelected,
             ]}
-            onPress={() => handleSelectCards(card)}
+            onPress={() => handleSelectCards(card.id)}
           >
-            <Text style={styles.buttonText}>{card}</Text>
+            <Text style={styles.buttonText}>{card.name}</Text>
           </TouchableOpacity>
         ))}
       </View>
 
       <View style={styles.action}>
         <TouchableOpacity
+          onPress={handleSelection}
           disabled={!selectionCompleted()}
           style={[
             styles.shadow,

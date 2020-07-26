@@ -120,6 +120,38 @@ const changeCard = async (playerId, cardId) => {
   }
 };
 
+const retriveAmbassadorCards = async (gameCode, playerId) => {
+  try {
+    const response = await api.get(`/card/ambassador/${gameCode}/${playerId}`);
+
+    return response.data.cartas;
+  } catch (e) {
+    return Promise.reject(parseError(e));
+  }
+};
+
+const changeAmbassadorCards = async (
+  gameCode,
+  playerId,
+  returnedCardIds,
+  keepedCardIds
+) => {
+  try {
+    const payload = {
+      codigoPartida: gameCode,
+      idJogador: playerId,
+      idCartasDevolvidas: returnedCardIds,
+      idCartasMantidas: keepedCardIds,
+    };
+
+    const response = await api.put("/card/ambassador", payload);
+
+    return response.data;
+  } catch (e) {
+    return Promise.reject(parseError(e));
+  }
+};
+
 export {
   createGame,
   joinGame,
@@ -131,4 +163,6 @@ export {
   uncoverCard,
   terminateCard,
   changeCard,
+  retriveAmbassadorCards,
+  changeAmbassadorCards,
 };

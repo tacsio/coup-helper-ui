@@ -22,10 +22,9 @@ import {
   uncoverCard,
   terminateCard,
   changeCard,
+  retriveAmbassadorCards,
+  changeAmbassadorCards,
 } from "../../services/gameService";
-
-//! TODO: remover (vir pela API)
-const newCards = ["Capitão", "Duque", "Embaixador", "Condessa"];
 
 export default function Game() {
   const { signOutGame } = useContext(GameContext);
@@ -35,7 +34,10 @@ export default function Game() {
 
   const [statusPartida, setStatusPartida] = useState({});
   const [myRound, setMyRound] = useState(false);
+  const [selectionCards, setSelectionCards] = useState([]);
   const [ambassadorActionVisible, setAmbassadorActionVisible] = useState(false);
+  const [ambassadorActionEnabled, setAmbassadorActionEnabled] = useState(false);
+  const [ambassadorActionCount, setAmbassadorActionCount] = useState(0);
   const [winner, setWinner] = useState(undefined);
 
   //initial state
@@ -49,8 +51,15 @@ export default function Game() {
     const idJogador = statusPartida.idJogador;
     const idJogadorDaVez = statusPartida.idJogadorDaVez;
 
-    setMyRound(idJogadorDaVez && idJogador === idJogadorDaVez);
+    const isMyRound = idJogadorDaVez && idJogador === idJogadorDaVez;
+
+    setMyRound(isMyRound);
+    setAmbassadorActionEnabled(isMyRound && ambassadorActionCount === 0);
     searchWinner();
+
+    if (!isMyRound) {
+      setAmbassadorActionCount(0);
+    }
   }, [statusPartida]);
 
   function getRoundTitle() {
@@ -66,6 +75,7 @@ export default function Game() {
 
     return title;
   }
+
   function searchWinner() {
     if (statusPartida.statusPartida === "FINALIZADA") {
       const players = [
@@ -75,8 +85,7 @@ export default function Game() {
           eliminado: statusPartida.eliminado,
         },
       ];
-      const winner = players.find((player) => !player.eliminado);
-      setWinner(winner);
+      setWinner(players.find((player) => !player.eliminado));
     }
 
     return undefined;
@@ -168,10 +177,40 @@ export default function Game() {
   }
 
   /** Ambassador actions **/
-  function handleAmbassadorAction() {
-    console.log("embaixador");
-    console.log(statusPartida);
-    setAmbassadorActionVisible(!ambassadorActionVisible);
+  async function handleAmbassadorAction() {
+    try {
+      const cards = await retriveAmbassadorCards(
+        statusPartida.codigoPartida,
+        statusPartida.idJogador
+      );
+
+      const options = [
+        ...statusPartida.cartas.filter((c) => c.status === "OCULTA"),
+        ...cards,
+      ];
+
+      setSelectionCards(options);
+      setAmbassadorActionVisible(!ambassadorActionVisible);
+      setAmbassadorActionCount(1);
+      setAmbassadorActionEnabled(false);
+    } catch (error) {
+      showMessage(error);
+    }
+  }
+
+  async function handleAmbassadorChange(returnedCardIds, keepedCardIds) {
+    try {
+      const newState = await changeAmbassadorCards(
+        statusPartida.codigoPartida,
+        statusPartida.idJogador,
+        returnedCardIds,
+        keepedCardIds
+      );
+      setAmbassadorActionVisible(!ambassadorActionVisible);
+      setStatusPartida(newState);
+    } catch (error) {
+      showMessage(error);
+    }
   }
 
   return (
@@ -207,7 +246,10 @@ export default function Game() {
           style={styles.actionArea}
         >
           {ambassadorActionVisible ? (
-            <AmbassadorBox cards={newCards} />
+            <AmbassadorBox
+              cards={selectionCards}
+              handleChangeCards={handleAmbassadorChange}
+            />
           ) : (
             <OpponentBox
               selectedId={statusPartida.idJogadorDaVez}
@@ -222,6 +264,7 @@ export default function Game() {
           minusHandler={handleDecrementCoin}
           ambassadorHandler={handleAmbassadorAction}
           myRound={myRound}
+          ambassadorActionEnabled={ambassadorActionEnabled}
           uncoverCard={(idCard) => handleUncoverCard(idCard)}
           terminateCard={(idCard) => handleTerminateCard(idCard)}
           changeCard={(idCard) => handleChangeCard(idCard)}
