@@ -4,7 +4,7 @@
   "lang": "en",
   "name": "Coup Helper",
   "short_name": "Coup Helper",
-  "start_url": "/?utm_source=web_app_manifest",
+  "start_url": "/coup-helper-ui/?utm_source=web_app_manifest",
   "orientation": "portrait",
   "icons": [
     {
